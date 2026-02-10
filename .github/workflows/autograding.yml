@@ -1,0 +1,67 @@
+name: Autograding
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run visible tests
+        id: tests
+        run: |
+          npm test 2>&1 | tee test_output.txt
+          exit ${PIPESTATUS[0]}
+        continue-on-error: true
+
+      - name: Parse test results
+        if: always()
+        run: |
+          if [ -f test_results.json ]; then
+            echo "## Visible Test Results" >> $GITHUB_STEP_SUMMARY
+            node -e "
+              const results = require('./test_results.json');
+              const passed = results.passed || 0;
+              const failed = results.failed || 0;
+              const total = passed + failed;
+              const score = total > 0 ? Math.round((passed / total) * 100) : 0;
+              console.log('| Metric | Value |');
+              console.log('|--------|-------|');
+              console.log('| Passed | ' + passed + ' |');
+              console.log('| Failed | ' + failed + ' |');
+              console.log('| Score | ' + score + '% |');
+            " >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## Test Results" >> $GITHUB_STEP_SUMMARY
+            echo "See test output in the logs above." >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            test_results.json
+            test_output.txt
+
+      - name: Check test status
+        if: steps.tests.outcome == 'failure'
+        run: exit 1

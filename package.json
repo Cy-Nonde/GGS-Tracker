@@ -1,0 +1,26 @@
+{
+  "name": "csc4035-final-project",
+  "version": "1.0.0",
+  "description": "CSC4035 Final Project - Full-Stack Web Application",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "node --watch server/server.js",
+    "test": "node tests/visible/tests.js"
+  },
+  "keywords": [
+    "csc4035",
+    "web-development",
+    "express",
+    "full-stack"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "uuid": "^9.0.0",
+    "helmet": "^7.1.0",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {}
+}
