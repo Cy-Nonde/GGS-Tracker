@@ -17,10 +17,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.18.2",
-    "uuid": "^9.0.0",
     "helmet": "^7.1.0",
-    "cors": "^2.8.5"
-  },
-  "devDependencies": {}
+    "uuid": "^14.0.0"
+  }
 }
