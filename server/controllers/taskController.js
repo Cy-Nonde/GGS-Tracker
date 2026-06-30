@@ -1,37 +1,50 @@
 // server/controllers/taskController.js
 const Task = require("../models/task");
 
-exports.getAllTasks = (req, res, next) => {
+// GET all tasks
+exports.getAllTasks = async (req, res, next) => {
   try {
-    res.json({ success: true, data: Task.getAll() });
+    const tasks = await Task.getAll().then(data => data);
+    res.json({ success: true, count: tasks.length, data: tasks });
   } catch (err) {
     next(err);
   }
 };
 
-exports.createTask = (req, res, next) => {
+// CREATE a new task
+exports.createTask = async (req, res, next) => {
   try {
-    const newTask = Task.create(req.body);
+    const newTask = await Task.create(req.body).then(data => data);
     res.status(201).json({ success: true, data: newTask });
   } catch (err) {
-    next(err);
+    res.status(400).json({ success: false, error: err.message });
   }
 };
 
-exports.updateTask = (req, res, next) => {
+// UPDATE task by ID
+exports.updateTask = async (req, res, next) => {
   try {
-    const updated = Task.update(req.params.id, req.body);
+    const updated = await Task.update(req.params.id, req.body).then(data => data);
     res.json({ success: true, data: updated });
   } catch (err) {
-    next(err);
+    if (err.message.includes("not found")) {
+      res.status(404).json({ success: false, error: err.message });
+    } else {
+      next(err);
+    }
   }
 };
 
-exports.deleteTask = (req, res, next) => {
+// DELETE task by ID
+exports.deleteTask = async (req, res, next) => {
   try {
-    Task.delete(req.params.id);
+    await Task.delete(req.params.id).then(() => null);
     res.status(204).end();
   } catch (err) {
-    next(err);
+    if (err.message.includes("not found")) {
+      res.status(404).json({ success: false, error: err.message });
+    } else {
+      next(err);
+    }
   }
 };

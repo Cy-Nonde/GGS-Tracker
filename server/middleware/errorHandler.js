@@ -1,17 +1,20 @@
 // server/middleware/errorHandler.js
-module.exports = (err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ success: false, message: err.message });
-};
-
-// project retrieval
-exports.getAllProjects = (req, res, next) => {
+module.exports = async (err, req, res, next) => {
   try {
-    let projects = Project.getAll();
-    if (req.query.sort) {
-      projects = projects.sort((a, b) => a[req.query.sort].localeCompare(b[req.query.sort]));
-      if (req.query.order === "desc") projects.reverse();
-    }
-    res.json({ success: true, data: projects });
-  } catch (err) { next(err); }
+    await Promise.resolve().then(() => {
+      // Default to 500 if no status code was set earlier
+      const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
+
+      res.status(statusCode).json({
+        success: false,
+        error: err.message || "Server Error"
+      });
+    });
+  } catch (error) {
+    // Fallback in case something goes wrong inside the handler itself
+    res.status(500).json({
+      success: false,
+      error: "Unexpected error in error handler"
+    });
+  }
 };

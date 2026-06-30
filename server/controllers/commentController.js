@@ -1,29 +1,50 @@
 // server/controllers/commentController.js
 const Comment = require("../models/comment");
 
-exports.getAllComments = (req, res, next) => {
+// GET all comments
+exports.getAllComments = async (req, res, next) => {
   try {
-    res.json({ success: true, data: Comment.getAll() });
-  } catch (err) { next(err); }
+    const comments = await Comment.getAll().then(data => data);
+    res.json({ success: true, count: comments.length, data: comments });
+  } catch (err) {
+    next(err);
+  }
 };
 
-exports.addComment = (req, res, next) => {
+// ADD a new comment
+exports.addComment = async (req, res, next) => {
   try {
-    const newComment = Comment.create(req.body);
+    const newComment = await Comment.create(req.body).then(data => data);
     res.status(201).json({ success: true, data: newComment });
-  } catch (err) { next(err); }
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
 };
 
-exports.updateComment = (req, res, next) => {
+// UPDATE comment by ID
+exports.updateComment = async (req, res, next) => {
   try {
-    const updated = Comment.update(req.params.id, req.body);
+    const updated = await Comment.update(req.params.id, req.body).then(data => data);
     res.json({ success: true, data: updated });
-  } catch (err) { next(err); }
+  } catch (err) {
+    if (err.message.includes("not found")) {
+      res.status(404).json({ success: false, error: err.message });
+    } else {
+      next(err);
+    }
+  }
 };
 
-exports.deleteComment = (req, res, next) => {
+// DELETE comment by ID
+exports.deleteComment = async (req, res, next) => {
   try {
-    Comment.delete(req.params.id);
+    await Comment.delete(req.params.id).then(() => null);
     res.status(204).end();
-  } catch (err) { next(err); }
+  } catch (err) {
+    if (err.message.includes("not found")) {
+      res.status(404).json({ success: false, error: err.message });
+    } else {
+      next(err);
+    }
+  }
 };

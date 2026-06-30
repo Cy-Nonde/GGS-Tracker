@@ -1,37 +1,59 @@
 // server/controllers/projectController.js
 const Project = require("../models/project");
 
-exports.getAllProjects = (req, res, next) => {
+// GET all projects
+exports.getAllProjects = async (req, res, next) => {
   try {
-    res.json({ success: true, data: Project.getAll() });
+    const projects = await Project.getAll().then(data => data);
+    res.json({ success: true, count: projects.length, data: projects });
   } catch (err) {
     next(err);
   }
 };
 
-exports.createProject = (req, res, next) => {
+// CREATE a new project
+exports.createProject = async (req, res, next) => {
   try {
-    const newProject = Project.create(req.body);
+    const newProject = await Project.create(req.body).then(data => data);
     res.status(201).json({ success: true, data: newProject });
   } catch (err) {
-    next(err);
+    res.status(400).json({ success: false, error: err.message });
   }
 };
 
-exports.updateProject = (req, res, next) => {
+// UPDATE project by ID
+exports.updateProject = async (req, res, next) => {
   try {
-    const updated = Project.update(req.params.id, req.body);
+    const updated = await Project.update(req.params.id, req.body).then(data => data);
     res.json({ success: true, data: updated });
   } catch (err) {
-    next(err);
+    if (err.message.includes("not found")) {
+      res.status(404).json({ success: false, error: err.message });
+    } else {
+      next(err);
+    }
   }
 };
 
-exports.deleteProject = (req, res, next) => {
+// DELETE project by ID
+exports.deleteProject = async (req, res, next) => {
   try {
-    Project.delete(req.params.id);
+    await Project.delete(req.params.id).then(() => null);
     res.status(204).end();
   } catch (err) {
-    next(err);
+    if (err.message.includes("not found")) {
+      res.status(404).json({ success: false, error: err.message });
+    } else {
+      next(err);
+    }
   }
 };
+
+
+
+
+
+
+
+
+

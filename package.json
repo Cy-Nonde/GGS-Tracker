@@ -1,7 +1,7 @@
 {
-  "name": "csc4035-final-project",
+  "name": "csc4004",
   "version": "1.0.0",
-  "description": "CSC4035 Final Project - Full-Stack Web Application",
+  "description": "ggs tracker",
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",
@@ -9,17 +9,29 @@
     "test": "node tests/visible/tests.js"
   },
   "keywords": [
-    "csc4035",
-    "web-development",
+    "csc4004",
+    "ggs",
     "express",
-    "full-stack"
+    "tracker"
   ],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.18.2",
-    "helmet": "^7.1.0",
+    "cors": "^2.8.6",
+    "express": "^4.22.2",
+    "helmet": "^7.2.0",
     "uuid": "^14.0.0"
-  }
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unza-cs-courses/final-project-Cy-Nonde.git"
+  },
+  "bugs": {
+    "url": "https://github.com/unza-cs-courses/final-project-Cy-Nonde/issues"
+  },
+  "homepage": "https://github.com/unza-cs-courses/final-project-Cy-Nonde#readme"
 }

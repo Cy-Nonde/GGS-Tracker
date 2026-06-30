@@ -1,29 +1,50 @@
 // server/controllers/collaboratorController.js
 const Collaborator = require("../models/collaborator");
 
-exports.getAllCollaborators = (req, res, next) => {
+// GET all collaborators
+exports.getAllCollaborators = async (req, res, next) => {
   try {
-    res.json({ success: true, data: Collaborator.getAll() });
-  } catch (err) { next(err); }
+    const collaborators = await Collaborator.getAll().then(data => data);
+    res.json({ success: true, count: collaborators.length, data: collaborators });
+  } catch (err) {
+    next(err);
+  }
 };
 
-exports.addCollaborator = (req, res, next) => {
+// ADD a new collaborator
+exports.addCollaborator = async (req, res, next) => {
   try {
-    const newCollab = Collaborator.create(req.body);
+    const newCollab = await Collaborator.create(req.body).then(data => data);
     res.status(201).json({ success: true, data: newCollab });
-  } catch (err) { next(err); }
+  } catch (err) {
+    res.status(400).json({ success: false, error: err.message });
+  }
 };
 
-exports.updateCollaborator = (req, res, next) => {
+// UPDATE collaborator by ID
+exports.updateCollaborator = async (req, res, next) => {
   try {
-    const updated = Collaborator.update(req.params.id, req.body);
+    const updated = await Collaborator.update(req.params.id, req.body).then(data => data);
     res.json({ success: true, data: updated });
-  } catch (err) { next(err); }
+  } catch (err) {
+    if (err.message.includes("not found")) {
+      res.status(404).json({ success: false, error: err.message });
+    } else {
+      next(err);
+    }
+  }
 };
 
-exports.removeCollaborator = (req, res, next) => {
+// DELETE collaborator by ID
+exports.removeCollaborator = async (req, res, next) => {
   try {
-    Collaborator.delete(req.params.id);
+    await Collaborator.delete(req.params.id).then(() => null);
     res.status(204).end();
-  } catch (err) { next(err); }
+  } catch (err) {
+    if (err.message.includes("not found")) {
+      res.status(404).json({ success: false, error: err.message });
+    } else {
+      next(err);
+    }
+  }
 };

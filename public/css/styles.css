@@ -12,7 +12,10 @@
 }
 
 body {
-  display: grid;  
+  display: grid;
+  grid-template-rows: auto 1fr auto; /* header, main, footer */
+  grid-template-columns: 1fr;        /* single column layout */
+  min-height: 100vh;                 /* full viewport height */
   font-family: Arial, sans-serif;
   font-size: 1rem;
   line-height: 1.5;
@@ -22,6 +25,7 @@ body {
 }
 
 header {
+  grid-row: 1;
   background: var(--primary-color);
   color: #fff;
   padding: 1rem;
@@ -57,18 +61,23 @@ nav button:focus {
 }
 
 main {
+  grid-row: 2;
   padding: 1rem;
 }
 
+footer {
+  grid-row: 3;
+}
+
 .html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 .container {
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 var(--spacing-md);
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
 }
 
 .project-card, .task-card, .collaborator-card, .comment-card {

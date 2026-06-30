@@ -11,7 +11,7 @@ async function apiRequest(url, method = "GET", body = null) {
     return await res.json();
   } catch (err) {
     console.error(err);
-    return { success: false, message: err.message };
+    return { success: false, error: err.message };
   }
 }
 
@@ -39,4 +39,30 @@ export async function updateComment(id, updates) {
 }
 export async function deleteComment(id) {
   return await apiRequest(`/api/comments/${id}`, "DELETE");
+}
+
+export async function getProjects() {
+  return await apiRequest("/api/projects");
+}
+export async function addProject(project) {
+  return await apiRequest("/api/projects", "POST", project);
+}
+export async function updateProject(id, updates) {
+  return await apiRequest(`/api/projects/${id}`, "PUT", updates);
+}
+export async function deleteProject(id) {
+  return await apiRequest(`/api/projects/${id}`, "DELETE");
+}
+
+export async function getTasks() {
+  return await apiRequest("/api/tasks");
+}
+export async function addTask(task) {
+  return await apiRequest("/api/tasks", "POST", task);
+}
+export async function updateTask(id, updates) {
+  return await apiRequest(`/api/tasks/${id}`, "PUT", updates);
+}
+export async function deleteTask(id) {
+  return await apiRequest(`/api/tasks/${id}`, "DELETE");
 }
