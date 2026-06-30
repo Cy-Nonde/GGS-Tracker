@@ -27,7 +27,7 @@ npm start
 npm test
 ```
 
-Server runs at `http://localhost:3000`
+Server runs at `http://localhost:8080`
 
 ---
 
