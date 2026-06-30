@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * CSC4035 Final Project - Visible Tests
+ * CSC4004 Project Visible Tests
  *
  * These tests check basic functionality and structure requirements.
  * Hidden tests will check edge cases and advanced features after deadline.
@@ -67,7 +67,7 @@ function makeRequest(options) {
 }
 
 async function runTests() {
-    console.log('\n=== CSC4035 Final Project - Visible Tests ===\n');
+    console.log('\n=== CSC4004 Project Visible Tests ===\n');
 
     // =========================================================================
     // STRUCTURE TESTS
@@ -236,7 +236,7 @@ async function runTests() {
         try {
             const healthRes = await makeRequest({
                 hostname: 'localhost',
-                port: 3000,
+                port: 8080,
                 path: '/api/health',
                 method: 'GET'
             });
@@ -257,7 +257,7 @@ async function runTests() {
         assert(serverStarted, 'Server failed to start');
         const res = await makeRequest({
             hostname: 'localhost',
-            port: 3000,
+            port: 8080,
             path: '/api/health',
             method: 'GET'
         });
@@ -270,7 +270,7 @@ async function runTests() {
         assert(serverStarted, 'Server failed to start');
         const res = await makeRequest({
             hostname: 'localhost',
-            port: 3000,
+            port: 8080,
             path: '/api/items',
             method: 'GET'
         });
@@ -285,7 +285,7 @@ async function runTests() {
         assert(serverStarted, 'Server failed to start');
         const res = await makeRequest({
             hostname: 'localhost',
-            port: 3000,
+            port: 8080,
             path: '/api/items',
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -302,7 +302,7 @@ async function runTests() {
         assert(serverStarted, 'Server failed to start');
         const res = await makeRequest({
             hostname: 'localhost',
-            port: 3000,
+            port: 8080,
             path: '/api/items',
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -317,7 +317,7 @@ async function runTests() {
         assert(serverStarted, 'Server failed to start');
         const res = await makeRequest({
             hostname: 'localhost',
-            port: 3000,
+            port: 8080,
             path: '/api/nonexistent',
             method: 'GET'
         });
@@ -329,7 +329,7 @@ async function runTests() {
         assert(serverStarted, 'Server failed to start');
         const res = await makeRequest({
             hostname: 'localhost',
-            port: 3000,
+            port: 8080,
             path: '/',
             method: 'GET'
         });
