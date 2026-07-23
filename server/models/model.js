@@ -1,19 +1,11 @@
 // model.js
-const tf = require('@tensorflow/tfjs');
+const brain = require('brain.js');
 
-function createModel() {
-  const model = tf.sequential();
-  model.add(tf.layers.dense({ units: 16, activation: 'relu', inputShape: [10] }));
-  model.add(tf.layers.dense({ units: 8, activation: 'relu' }));
-  model.add(tf.layers.dense({ units: 1, activation: 'sigmoid' }));
+// Define a simple feedforward neural network
+const net = new brain.NeuralNetwork({
+  hiddenLayers: [3],   // you can adjust layer sizes
+  activation: 'sigmoid' // options: 'sigmoid', 'relu', 'leaky-relu', 'tanh'
+});
 
-  model.compile({
-    optimizer: tf.train.adam(),
-    loss: 'binaryCrossentropy',
-    metrics: ['accuracy']
-  });
-
-  return model;
-}
-
-module.exports = { createModel };
+// Export the network so train.js can use it
+module.exports = net;
