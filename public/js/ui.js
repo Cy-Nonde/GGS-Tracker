@@ -93,3 +93,14 @@ export async function renderTimeline() {
   app.innerHTML = "<p>Timeline view coming soon...</p>";
 }
 
+// --- AI ---
+export function renderMessage(role, text) {
+  const chatWindow = document.getElementById("chat-window");
+  const bubble = document.createElement("div");
+
+  bubble.className = role === "user" ? "bubble user" : "bubble ai";
+  bubble.textContent = text;
+
+  chatWindow.appendChild(bubble);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+}
