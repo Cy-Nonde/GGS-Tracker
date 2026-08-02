@@ -1,17 +1,15 @@
- // server/middleware/auth.js
-module.exports = async (req, res, next) => {
+// server/middleware/auth.js
+const jwt = require("jsonwebtoken");
+
+module.exports = (req, res, next) => {
+  const token = req.headers["authorization"];
+  if (!token) return res.status(403).json({ error: "Unauthorized" });
+
   try {
-    const user = await Promise.resolve(req.headers["x-user"])
-      .then(data => data);
-
-    if (!user) {
-      return res.status(401).json({ success: false, message: "Login required" });
-    }
-
-    req.user = user; // attach user to request
+    const decoded = jwt.verify(token.replace("Bearer ", ""), process.env.JWT_SECRET);
+    req.userId = decoded.id;
     next();
-  } catch (err) {
-    next(err);
+  } catch {
+    res.status(403).json({ error: "Invalid token" });
   }
 };
-
