@@ -1,12 +1,15 @@
-// notification.js
-const mongoose = require('mongoose');
+// routes/notifications.js
+const express = require('express');
+const router = express.Router();
+const Notification = require('../models/notification');
 
-const notificationSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  milestone: String,
-  message: String,
-  deliveredAt: Date,
-  status: { type: String, enum: ['sent', 'failed'] }
+router.get('/:userId', async (req, res) => {
+  try {
+    const notifications = await Notification.find({ userId: req.params.userId }).sort({ deliveredAt: -1 });
+    res.json(notifications);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-module.exports = mongoose.model('Notification', notificationSchema);
+module.exports = router;
