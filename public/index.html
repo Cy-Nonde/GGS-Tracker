@@ -14,14 +14,15 @@
   <header>
     <h1>📊 GGS HOME 📊</h1>
     <nav>
-      <button id="projectsBtn">Projects</button>
-      <button id="tasksBtn">Tasks</button>
-      <button id="timelineBtn">Timeline</button>
-      <button id="collaboratorsBtn">Collaborators</button>
-      <button id="commentsBtn">Comments</button>
-      <button id="recordsBtn">Records</button>
-      <button id="notificationsHstryBtn">History</button>
-      <button id="chatBtn">Chatbot</button>
+      <button id="projects-btn">Projects</button>
+      <button id="tasks-btn">Tasks</button>
+      <button id="timeline-btn">Timeline</button>
+      <button id="collaborators-btn">Collaborators</button>
+      <button id="comments-btn">Comments</button>
+      <button id="records-btn">Records</button>
+      <button id="notifications-btn">Notifications</button>
+      <button id="history-btn">History</button>
+      <button id="chat-btn">Chatbot</button>
     </nav>
     <div id="status" aria-live="polite"></div>
     <div id="health" class="health-status" aria-live="polite"></div>
@@ -31,7 +32,7 @@
        MAIN CONTENT AREA
        ============================================ -->
   <main id="app" role="main">
-    <!-- Other dynamic content rendered by JS -->
+    <!-- Dynamic content rendered by JS -->
 
     <!-- Integrated AI Chatbot -->
     <section id="auth-section" style="display:none;">
@@ -88,6 +89,16 @@
       <button id="toggle-dark">Toggle Dark Mode</button>
       <button id="logout-btn">Logout</button>
     </section>
+
+    <!-- ============================================
+         EXTRA FEATURE WINDOWS
+         ============================================ -->
+    <section id="notifications-window"></section>
+    <section id="records-window"></section>
+    <section id="timeline-window"></section>
+    <section id="collaborators-window"></section>
+    <section id="comments-window"></section>
+    <section id="history-window"></section>
   </main>
 
   <!-- ============================================
