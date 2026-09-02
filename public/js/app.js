@@ -1,79 +1,22 @@
 // public/js/app.js
 import { 
-  getProjects, getTasks, getCollaborators, getComments,
-  addProject, addTask, addCollaborator, addComment,
-  updateProject, updateTask, updateCollaborator, updateComment,
-  deleteProject, deleteTask, deleteCollaborator, deleteComment
-} from "./api.js";
-import { renderProjects, renderTasks, renderCollaborators, renderComments, renderTimeline } from "./ui.js";
-
-// --- Login / Logout ---
-function login(username) {
-  localStorage.setItem("user", username);
-  renderUserStatus();
-}
-
-function logout() {
-  localStorage.removeItem("user");
-  renderUserStatus();
-}
-
-function renderUserStatus() {
-  const statusBar = document.getElementById("status");
-  const user = localStorage.getItem("user");
-  statusBar.innerHTML = user 
-    ? `<p>Logged in as ${user} <button onclick="logout()">Logout</button></p>` 
-    : `<p>Not logged in <button onclick="login('DemoUser')">Login</button></p>`;
-}
-
-// --- Health Check ---
-async function checkServerHealth() {
-  try {
-    const res = await fetch("/api/health");
-    const json = await res.json();
-    if (json.success) {
-      console.log("Health:", json.message, json.timestamp);
-      document.getElementById("health").innerText = `✅ ${json.message}`;
-    } else {
-      document.getElementById("health").innerText = `❌ Server error`;
-    }
-  } catch (err) {
-    console.error(err);
-    document.getElementById("health").innerText = `❌ Cannot reach server`;
-  }
-}
-
-// --- Initialization ---
-document.addEventListener("DOMContentLoaded", async () => {
-  // Render login status
-  renderUserStatus();
-
-  // Wire up navigation buttons
-  document.getElementById("projectsBtn").addEventListener("click", renderProjects);
-  document.getElementById("tasksBtn").addEventListener("click", renderTasks);
-  document.getElementById("collaboratorsBtn").addEventListener("click", renderCollaborators);
-  document.getElementById("commentsBtn").addEventListener("click", renderComments);
-
-document.getElementById("timelineBtn").addEventListener("click", renderTimeline);
-
-  // Default view
-  await renderProjects();
-
-  // Health check
-  await checkServerHealth();
-});
-
-import { 
   sendMessage, 
   loadHistory, 
   clearHistory, 
   login, 
   register, 
   updateMode, 
-  changePassword 
+  changePassword,
+  fetchNotifications,
+  fetchRecords,
+  fetchTimeline,
+  fetchCollaborators,
+  fetchComments,
+  fetchProjectHistory
 } from "./api.js";
-import { renderMessage } from "./ui.js";
+import { renderMessage, renderNotification, renderRecord, renderTimeline, renderCollaborator, renderComment, renderHistory } from "./ui.js";
 
+// Existing DOM refs...
 const chatForm = document.getElementById("chat-form");
 const chatInput = document.getElementById("chat-input");
 const chatWindow = document.getElementById("chat-window");
@@ -84,11 +27,21 @@ const registerForm = document.getElementById("register-form");
 const passwordForm = document.getElementById("password-form");
 const rememberMeCheckbox = document.getElementById("remember-me");
 const saveModeBtn = document.getElementById("save-mode");
+const toggleDarkBtn = document.getElementById("toggle-dark");
+const logoutBtn = document.getElementById("logout-btn");
+
+// New DOM refs for extra features
+const notificationsBtn = document.getElementById("notifications-btn");
+const recordsBtn = document.getElementById("records-btn");
+const timelineBtn = document.getElementById("timeline-btn");
+const collaboratorsBtn = document.getElementById("collaborators-btn");
+const commentsBtn = document.getElementById("comments-btn");
+const historyBtn = document.getElementById("history-btn");
 
 let currentMode = "default";
 let username = "guest";
 
-// Load history after login
+// Load chat history after login
 async function initChat() {
   const history = await loadHistory(username);
   chatWindow.innerHTML = "";
@@ -99,21 +52,19 @@ async function initChat() {
   }
 }
 
-// Handle chat submission
+// Chat submission
 chatForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const userMessage = chatInput.value.trim();
   if (!userMessage) return;
 
   const mode = modeSelect.value || currentMode;
-
   renderMessage("user", userMessage);
   chatInput.value = "";
 
   const { reply, mode: updatedMode } = await sendMessage(userMessage, [], mode, username);
   currentMode = updatedMode;
   modeSelect.value = updatedMode;
-
   renderMessage("ai", reply);
 });
 
@@ -190,33 +141,19 @@ window.addEventListener("load", () => {
     window.USERNAME = savedUser;
     initChat();
   }
-});
-
-//dark-mode
-const toggleDarkBtn = document.getElementById("toggle-dark");
-
-toggleDarkBtn.addEventListener("click", () => {
-  document.body.classList.toggle("dark-mode");
-
-  // Save preference
-  if (document.body.classList.contains("dark-mode")) {
-    localStorage.setItem("theme", "dark");
-  } else {
-    localStorage.setItem("theme", "light");
-  }
-});
-
-// Apply saved theme on load
-window.addEventListener("load", () => {
   const savedTheme = localStorage.getItem("theme");
   if (savedTheme === "dark") {
     document.body.classList.add("dark-mode");
   }
 });
 
-//Logout
-const logoutBtn = document.getElementById("logout-btn");
+// Dark mode toggle
+toggleDarkBtn.addEventListener("click", () => {
+  document.body.classList.toggle("dark-mode");
+  localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
+});
 
+// Logout
 logoutBtn.addEventListener("click", () => {
   localStorage.removeItem("USERNAME");
   localStorage.removeItem("API_TOKEN");
@@ -224,35 +161,37 @@ logoutBtn.addEventListener("click", () => {
   window.USERNAME = null;
   window.API_TOKEN = null;
   alert("Logged out successfully!");
-  // Optionally reset UI
   chatWindow.innerHTML = "";
   modeSelect.value = "default";
 });
 
-//Hide or Show AI\\
-
-// Wait for DOM
-document.addEventListener("DOMContentLoaded", () => {
-  const chatBtn = document.getElementById("chatBtn");
-
-  // Sections
-  const authSection = document.getElementById("auth-section");
-  const chatSection = document.getElementById("chat-section");
-  const profileSection = document.getElementById("profile-section");
-  const extrasSection = document.getElementById("extras-section");
-
-  // Toggle Chatbot view
-  chatBtn.addEventListener("click", () => {
-    // Hide other app content if needed
-    document.querySelectorAll("main > section").forEach(sec => {
-      sec.style.display = "none";
-    });
-
-    // Show chatbot sections
-    authSection.style.display = "block";
-    chatSection.style.display = "block";
-    profileSection.style.display = "block";
-    extrasSection.style.display = "block";
-  });
+// ✅ New feature buttons
+notificationsBtn.addEventListener("click", async () => {
+  const notes = await fetchNotifications(username);
+  notes.forEach(n => renderNotification(n));
 });
 
+recordsBtn.addEventListener("click", async () => {
+  const recs = await fetchRecords(username);
+  recs.forEach(r => renderRecord(r));
+});
+
+timelineBtn.addEventListener("click", async () => {
+  const timeline = await fetchTimeline(username);
+  timeline.forEach(t => renderTimeline(t));
+});
+
+collaboratorsBtn.addEventListener("click", async () => {
+  const collabs = await fetchCollaborators(username);
+  collabs.forEach(c => renderCollaborator(c));
+});
+
+commentsBtn.addEventListener("click", async () => {
+  const comments = await fetchComments(username);
+  comments.forEach(c => renderComment(c));
+});
+
+historyBtn.addEventListener("click", async () => {
+  const history = await fetchProjectHistory(username);
+  history.forEach(h => renderHistory(h));
+});

@@ -1,20 +1,6 @@
 // public/js/api.js
 
-async function apiRequest(url, method = "GET", body = null) {
-  try {
-    const options = { method, headers: { "Content-Type": "application/json" } };
-    const user = localStorage.getItem("user");
-    if (user) options.headers["x-user"] = user; // attach simulated login
-    if (body) options.body = JSON.stringify(body);
-    const res = await fetch(url, options);
-    if (!res.ok) throw new Error(`Error ${res.status}: ${res.statusText}`);
-    return await res.json();
-  } catch (err) {
-    console.error(err);
-    return { success: false, error: err.message };
-  }
-}
-
+// ✅ Authentication
 export async function register(username, password) {
   const res = await fetch("/api/register", {
     method: "POST",
@@ -38,7 +24,7 @@ export async function login(username, password) {
   return data;
 }
 
-
+// ✅ Chat
 export async function sendMessage(message, context = [], mode = "default", username = "guest") {
   try {
     const response = await fetch("/api/chat", {
@@ -59,6 +45,7 @@ export async function sendMessage(message, context = [], mode = "default", usern
   }
 }
 
+// ✅ History
 export async function loadHistory(username = "guest") {
   try {
     const response = await fetch(`/api/history/${username}`, {
@@ -86,6 +73,7 @@ export async function clearHistory(username = "guest") {
   }
 }
 
+// ✅ Profile
 export async function updateMode(mode) {
   const res = await fetch("/api/profile/mode", {
     method: "PUT",
@@ -110,54 +98,82 @@ export async function changePassword(oldPassword, newPassword) {
   return res.json();
 }
 
-export async function getCollaborators() {
-  return await apiRequest("/api/collaborators");
-}
-export async function addCollaborator(collab) {
-  return await apiRequest("/api/collaborators", "POST", collab);
-}
-export async function updateCollaborator(id, updates) {
-  return await apiRequest(`/api/collaborators/${id}`, "PUT", updates);
-}
-export async function deleteCollaborator(id) {
-  return await apiRequest(`/api/collaborators/${id}`, "DELETE");
+// ✅ Extras (mobile features mirrored)
+
+// Notifications
+export async function fetchNotifications(projectId) {
+  try {
+    const res = await fetch(`/api/projects/${projectId}/history/notifications`, {
+      headers: { "Authorization": `Bearer ${window.API_TOKEN || ""}` }
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("Notifications fetch error:", err);
+    return [];
+  }
 }
 
-export async function getComments() {
-  return await apiRequest("/api/comments");
-}
-export async function addComment(comment) {
-  return await apiRequest("/api/comments", "POST", comment);
-}
-export async function updateComment(id, updates) {
-  return await apiRequest(`/api/comments/${id}`, "PUT", updates);
-}
-export async function deleteComment(id) {
-  return await apiRequest(`/api/comments/${id}`, "DELETE");
-}
-
-export async function getProjects() {
-  return await apiRequest("/api/projects");
-}
-export async function addProject(project) {
-  return await apiRequest("/api/projects", "POST", project);
-}
-export async function updateProject(id, updates) {
-  return await apiRequest(`/api/projects/${id}`, "PUT", updates);
-}
-export async function deleteProject(id) {
-  return await apiRequest(`/api/projects/${id}`, "DELETE");
+// Records
+export async function fetchRecords(projectId) {
+  try {
+    const res = await fetch(`/api/projects/${projectId}/records`, {
+      headers: { "Authorization": `Bearer ${window.API_TOKEN || ""}` }
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("Records fetch error:", err);
+    return [];
+  }
 }
 
-export async function getTasks() {
-  return await apiRequest("/api/tasks");
+// Timeline
+export async function fetchTimeline(projectId) {
+  try {
+    const res = await fetch(`/api/projects/${projectId}/timeline`, {
+      headers: { "Authorization": `Bearer ${window.API_TOKEN || ""}` }
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("Timeline fetch error:", err);
+    return [];
+  }
 }
-export async function addTask(task) {
-  return await apiRequest("/api/tasks", "POST", task);
+
+// Collaborators
+export async function fetchCollaborators(projectId) {
+  try {
+    const res = await fetch(`/api/projects/${projectId}/collaborators`, {
+      headers: { "Authorization": `Bearer ${window.API_TOKEN || ""}` }
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("Collaborators fetch error:", err);
+    return [];
+  }
 }
-export async function updateTask(id, updates) {
-  return await apiRequest(`/api/tasks/${id}`, "PUT", updates);
+
+// Comments
+export async function fetchComments(projectId) {
+  try {
+    const res = await fetch(`/api/projects/${projectId}/comments`, {
+      headers: { "Authorization": `Bearer ${window.API_TOKEN || ""}` }
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("Comments fetch error:", err);
+    return [];
+  }
 }
-export async function deleteTask(id) {
-  return await apiRequest(`/api/tasks/${id}`, "DELETE");
+
+// Project History (combined records + notifications)
+export async function fetchProjectHistory(projectId) {
+  try {
+    const res = await fetch(`/api/projects/${projectId}/history`, {
+      headers: { "Authorization": `Bearer ${window.API_TOKEN || ""}` }
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("Project history fetch error:", err);
+    return [];
+  }
 }

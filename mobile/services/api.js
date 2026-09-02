@@ -1,4 +1,6 @@
 // mobile/services/api.js
+
+// Authentication
 export async function register(username, password) {
   const res = await fetch("http://localhost:3000/api/register", {
     method: "POST",
@@ -22,6 +24,7 @@ export async function login(username, password) {
   return data;
 }
 
+// Chat
 export async function sendMessage(message, context = [], mode = "default", username = "guest") {
   try {
     const response = await fetch("http://localhost:3000/api/chat", {
@@ -42,6 +45,7 @@ export async function sendMessage(message, context = [], mode = "default", usern
   }
 }
 
+// History
 export async function loadHistory(username = "guest") {
   try {
     const response = await fetch(`http://localhost:3000/api/history/${username}`, {
@@ -66,5 +70,71 @@ export async function clearHistory(username = "guest") {
   } catch (err) {
     console.error("Clear history error:", err);
     return false;
+  }
+}
+
+// Profile
+export async function updateMode(mode) {
+  const res = await fetch("http://localhost:3000/api/profile/mode", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": global.API_TOKEN
+    },
+    body: JSON.stringify({ mode })
+  });
+  return res.json();
+}
+
+export async function changePassword(oldPassword, newPassword) {
+  const res = await fetch("http://localhost:3000/api/profile/password", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": global.API_TOKEN
+    },
+    body: JSON.stringify({ oldPassword, newPassword })
+  });
+  return res.json();
+}
+
+// Extras (optional parity with web features)
+
+// Notifications
+export async function fetchNotifications(projectId) {
+  try {
+    const res = await fetch(`http://localhost:3000/api/projects/${projectId}/history/notifications`, {
+      headers: { "Authorization": `Bearer ${global.API_TOKEN || ""}` }
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("Notifications fetch error:", err);
+    return [];
+  }
+}
+
+// Records
+export async function fetchRecords(projectId) {
+  try {
+    const res = await fetch(`http://localhost:3000/api/projects/${projectId}/records`, {
+      headers: { "Authorization": `Bearer ${global.API_TOKEN || ""}` }
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("Records fetch error:", err);
+    return [];
+  }
+}
+
+// Project History
+export async function fetchProjectHistory(projectId) {
+  try {
+    const res = await fetch(`http://localhost:3000/api/projects/${projectId}/history`, {
+      headers: { "Authorization": `Bearer ${global.API_TOKEN || ""}` }
+    });
+    return await res.json();
+  } catch (err) {
+    console.error("Project history fetch error:", err);
+    return [];
   }
 }
