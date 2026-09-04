@@ -1,7 +1,7 @@
 //mobile/components/NotificationScreen.js
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, Button, StyleSheet } from 'react-native';
-import { getNotifications, sendNotification } from '../controllers/notificationController';
+import { getNotifications, sendNotification } from '../controllers/notificationService';
 
 export default function NotificationScreen() {
   const [notifications, setNotifications] = useState([]);
