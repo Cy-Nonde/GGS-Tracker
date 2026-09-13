@@ -2,7 +2,7 @@
 
 // Authentication
 export async function register(username, password) {
-  const res = await fetch("http://localhost:3000/api/register", {
+  const res = await fetch("http://localhost:8080/api/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password })
@@ -11,7 +11,7 @@ export async function register(username, password) {
 }
 
 export async function login(username, password) {
-  const res = await fetch("http://localhost:3000/api/login", {
+  const res = await fetch("http://localhost:8080/api/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password })
@@ -27,7 +27,7 @@ export async function login(username, password) {
 // Chat
 export async function sendMessage(message, context = [], mode = "default", username = "guest") {
   try {
-    const response = await fetch("http://localhost:3000/api/chat", {
+    const response = await fetch("http://localhost:8080/api/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -48,7 +48,7 @@ export async function sendMessage(message, context = [], mode = "default", usern
 // History
 export async function loadHistory(username = "guest") {
   try {
-    const response = await fetch(`http://localhost:3000/api/history/${username}`, {
+    const response = await fetch(`http://localhost:8080/api/history/${username}`, {
       headers: { "Authorization": `Bearer ${global.API_TOKEN || ""}` }
     });
     const data = await response.json();
@@ -61,7 +61,7 @@ export async function loadHistory(username = "guest") {
 
 export async function clearHistory(username = "guest") {
   try {
-    const response = await fetch(`http://localhost:3000/api/history/${username}`, {
+    const response = await fetch(`http://localhost:8080/api/history/${username}`, {
       method: "DELETE",
       headers: { "Authorization": `Bearer ${global.API_TOKEN || ""}` }
     });
@@ -75,7 +75,7 @@ export async function clearHistory(username = "guest") {
 
 // Profile
 export async function updateMode(mode) {
-  const res = await fetch("http://localhost:3000/api/profile/mode", {
+  const res = await fetch("http://localhost:8080/api/profile/mode", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -87,7 +87,7 @@ export async function updateMode(mode) {
 }
 
 export async function changePassword(oldPassword, newPassword) {
-  const res = await fetch("http://localhost:3000/api/profile/password", {
+  const res = await fetch("http://localhost:8080/api/profile/password", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -103,7 +103,7 @@ export async function changePassword(oldPassword, newPassword) {
 // Notifications
 export async function fetchNotifications(projectId) {
   try {
-    const res = await fetch(`http://localhost:3000/api/projects/${projectId}/history/notifications`, {
+    const res = await fetch(`http://localhost:8080/api/projects/${projectId}/history/notifications`, {
       headers: { "Authorization": `Bearer ${global.API_TOKEN || ""}` }
     });
     return await res.json();
@@ -116,7 +116,7 @@ export async function fetchNotifications(projectId) {
 // Records
 export async function fetchRecords(projectId) {
   try {
-    const res = await fetch(`http://localhost:3000/api/projects/${projectId}/records`, {
+    const res = await fetch(`http://localhost:8080/api/projects/${projectId}/records`, {
       headers: { "Authorization": `Bearer ${global.API_TOKEN || ""}` }
     });
     return await res.json();
@@ -129,7 +129,7 @@ export async function fetchRecords(projectId) {
 // Project History
 export async function fetchProjectHistory(projectId) {
   try {
-    const res = await fetch(`http://localhost:3000/api/projects/${projectId}/history`, {
+    const res = await fetch(`http://localhost:8080/api/projects/${projectId}/history`, {
       headers: { "Authorization": `Bearer ${global.API_TOKEN || ""}` }
     });
     return await res.json();
