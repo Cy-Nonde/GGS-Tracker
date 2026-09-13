@@ -5,9 +5,6 @@ const cors = require("cors");
 const path = require("path");
 const errorHandler = require("./middleware/errorHandler");
 const http = require('http');
-const socketIo = require('socket.io');
-const server = http.createServer(app);
-const io = socketIo(server, { cors: { origin: '*' } });
 
 // Core project routes
 const projectRoutes = require("./routes/projects");
