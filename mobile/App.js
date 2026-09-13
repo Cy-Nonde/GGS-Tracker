@@ -16,41 +16,12 @@ import CollaboratorScreen from "./components/CollaboratorScreen";
 import CommentScreen from "./components/CommentScreen";
 import HistoryScreen from "./components/HistoryScreen";
 
-import Toast from "react-native-toast-message";
-import { toastConfig } from "./toastConfig";
-import socket from "./socket";
-
 // Contexts
 export const ThemeContext = createContext();
 export const AuthContext = createContext();
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-
-// 🔔 Global socket listeners
-function useGlobalSocketListeners() {
-  useEffect(() => {
-    socket.on("recordCreated", (record) => {
-      Toast.show({ type: "success", text1: "✅ Record Created", text2: record.data });
-    });
-    socket.on("recordUpdated", (record) => {
-      Toast.show({ type: "info", text1: "✏️ Record Updated", text2: record.data });
-    });
-    socket.on("recordDeleted", (record) => {
-      Toast.show({ type: "error", text1: "❌ Record Deleted", text2: `ID ${record.id}` });
-    });
-    socket.on("notificationSent", (note) => {
-      Toast.show({ type: "notification", text1: "🔔 Notification Sent", text2: note.message });
-    });
-
-    return () => {
-      socket.off("recordCreated");
-      socket.off("recordUpdated");
-      socket.off("recordDeleted");
-      socket.off("notificationSent");
-    };
-  }, []);
-}
 
 // Bottom tabs with badge counters
 function MainTabs({ notificationCount, clearNotifications }) {
@@ -115,8 +86,6 @@ export default function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [notificationCount, setNotificationCount] = useState(0);
 
-  useGlobalSocketListeners();
-
   useEffect(() => {
     (async () => {
       const savedUser = await AsyncStorage.getItem("USERNAME");
@@ -142,18 +111,6 @@ export default function App() {
     setAuthToken(null);
   };
 
-  // 🔔 Increment badge count when notifications arrive
-  useEffect(() => {
-    socket.on("notificationSent", () => {
-      setNotificationCount((prev) => {
-        const newCount = prev + 1;
-        AsyncStorage.setItem("NOTIFICATION_COUNT", newCount.toString());
-        return newCount;
-      });
-    });
-    return () => socket.off("notificationSent");
-  }, []);
-
   // 🔔 Clear badge when Notifications tab is opened
   const clearNotifications = () => {
     setNotificationCount(0);
@@ -168,7 +125,6 @@ export default function App() {
             notificationCount={notificationCount}
             clearNotifications={clearNotifications}
           />
-          <Toast config={toastConfig} />
         </NavigationContainer>
       </ThemeContext.Provider>
     </AuthContext.Provider>
