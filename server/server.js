@@ -4,7 +4,6 @@ const helmet = require("helmet");
 const cors = require("cors");
 const path = require("path");
 const errorHandler = require("./middleware/errorHandler");
-const http = require('http');
 
 // Core project routes
 const projectRoutes = require("./routes/projects");
