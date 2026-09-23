@@ -1,6 +1,8 @@
 // server/server.js
 const express = require("express");
 const path = require("path");
+const helmet = require("helmet");
+const cors = require("cors");
 const errorHandler = require("./middleware/errorHandler");
 
 // Core project routes
@@ -15,12 +17,12 @@ const recordRoutes = require('./routes/records');
 const chatRoutes = require("./routes/chatRoutes");
 const authRoutes = require("./routes/authRoutes");
 const app = express();
-const express = require('express');
-const app = express();
 const historyRoutes = require('./routes/history');
 
 // Middleware
 app.use(express.json());
+app.use(helmet());
+app.use(cors());
 app.use(express.static(path.join(__dirname, "../public")));
 
 // Routes
