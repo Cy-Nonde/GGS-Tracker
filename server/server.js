@@ -17,7 +17,6 @@ const recordRoutes = require('./routes/records');
 const chatRoutes = require("./routes/chatRoutes");
 const authRoutes = require("./routes/authRoutes");
 const app = express();
-const historyRoutes = require('./routes/history');
 
 // Middleware
 app.use(express.json());
