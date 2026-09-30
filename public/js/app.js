@@ -16,6 +16,12 @@ import {
 } from "./api.js";
 import { renderMessage, renderNotification, renderRecord, renderTimeline, renderCollaborator, renderComment, renderHistory } from "./ui.js";
 
+//DrugUse Reference
+document.getElementById("druguse-btn").addEventListener("click", () => {
+  window.location.href = "/DrugUse.html";
+});
+
+
 // Existing DOM refs...
 const chatForm = document.getElementById("chat-form");
 const chatInput = document.getElementById("chat-input");
