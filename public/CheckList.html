@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CheckList</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+.card {
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+}
+</style>
+</head>
+<body>
+
+<h1>CheckList</h1>
+
+<div id="content">
+    Loading...
+</div>
+
+<script>
+
+async function loadChecklist() {
+
+    const response =
+        await fetch("/api/checklist");
+
+    const data =
+        await response.json();
+
+    const content =
+        document.getElementById("content");
+
+    if (!data.eligible) {
+
+        content.innerHTML = `
+            <h3>Checklist Locked</h3>
+            <p>
+              ${data.daysRemaining}
+              days remaining before review.
+            </p>
+        `;
+
+        return;
+    }
+
+    let html = `
+      <h3>Month Complete</h3>
+    `;
+
+    data.records.forEach(record => {
+
+        html += `
+            <div class="card">
+                <strong>
+                  ${record.drug_name}
+                </strong>
+
+                <p>
+                  Status:
+                  ${record.status}
+                </p>
+
+                <p>
+                  Notes:
+                  ${record.notes || "None"}
+                </p>
+
+                <p>
+                  Date:
+                  ${record.created_at}
+                </p>
+            </div>
+        `;
+    });
+
+    content.innerHTML = html;
+}
+
+loadChecklist();
+
+</script>
+
+</body>
+</html>
