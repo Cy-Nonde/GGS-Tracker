@@ -59,6 +59,14 @@ router.get("/checklist", (req, res) => {
       if (err) {
         return res.status(500).json(err);
       }
+      
+      if (!result.first_record) {
+        return res.json({
+         eligible: false,
+         daysRemaining: 30,
+         message: "No drug-use records found."
+        });
+      }
 
       const firstRecord =
         new Date(result.first_record);
