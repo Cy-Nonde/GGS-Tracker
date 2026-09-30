@@ -2,8 +2,8 @@ name: Build Android APK
 
 on:
   push:
-    branches: [ main, master ] # Triggers when code is pushed
-  workflow_dispatch: # Allows to manually click "Run"
+    branches: [ main, master ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -16,17 +16,28 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22 
+          node-version: 22
 
       - name: Install Dependencies
         run: |
           npm install
-          # Force install the latest Capacitor ecosystem 
           npm install @capacitor/core@latest @capacitor/cli@latest @capacitor/android@latest
 
       - name: Build Web Application
         run: |
           npm run build --if-present 
+
+      - name: Force Generate Capacitor Config and Public Assets
+        run: |
+
+          cat << 'EOF' > capacitor.config.json
+          {
+            "appId": "com.ggs.ggstracker",
+            "appName": "GGS Tracker",
+            "webDir": "public",
+            "bundledWebRuntime": false
+          }
+          EOF
 
       - name: Add Android Native Platform
         run: |
