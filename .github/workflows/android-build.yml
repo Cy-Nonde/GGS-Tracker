@@ -2,8 +2,8 @@ name: Build Android APK
 
 on:
   push:
-    branches: [ main, master ] # Triggers whenever you push code
-  workflow_dispatch: # Allows you to manually click "Run" on your phone
+    branches: [ main, master ] # Triggers when code is pushed
+  workflow_dispatch: # Allows to manually click "Run"
 
 jobs:
   build:
@@ -16,18 +16,21 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22 # Runs safely in the cloud environment
+          node-version: 22 
 
       - name: Install Dependencies
         run: |
           npm install
-          npm install @capacitor/core @capacitor/cli @capacitor/android
+          # Force install the latest Capacitor ecosystem 
+          npm install @capacitor/core@latest @capacitor/cli@latest @capacitor/android@latest
 
       - name: Build Web Application
         run: |
-          # Replace 'npm run build' with your exact compilation command if you use Vite/Webpack.
-          # If using uncompiled static files directly in public/, leave this out.
           npm run build --if-present 
+
+      - name: Add Android Native Platform
+        run: |
+          npx cap add android
 
       - name: Sync Capacitor Native Files
         run: |
