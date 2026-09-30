@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DrugUse</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    input,
+    select,
+    textarea,
+    button {
+      padding: 10px;
+    }
+
+    .success {
+      color: green;
+    }
+
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+<h1>DrugUse</h1>
+
+<form id="druguse-form">
+
+  <label>Drug Name</label>
+  <input
+    type="text"
+    id="drug-name"
+    placeholder="Paracetamol"
+    required
+  />
+
+  <label>Status</label>
+  <select id="drug-status">
+    <option value="used">Used</option>
+    <option value="not_used">Not Used</option>
+  </select>
+
+  <label>Notes</label>
+  <textarea
+    id="drug-notes"
+    rows="4"
+    placeholder="Optional notes"
+  ></textarea>
+
+  <button type="submit">
+    Save Record
+  </button>
+
+</form>
+
+<p id="result"></p>
+
+<script>
+document
+  .getElementById("druguse-form")
+  .addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    const drugName =
+      document.getElementById("drug-name").value;
+
+    const status =
+      document.getElementById("drug-status").value;
+
+    const notes =
+      document.getElementById("drug-notes").value;
+
+    const response = await fetch("/api/druguse", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        drugName,
+        status,
+        notes
+      })
+    });
+
+    const data = await response.json();
+
+    const result =
+      document.getElementById("result");
+
+    if (data.success) {
+      result.className = "success";
+      result.textContent =
+        "Drug use record saved successfully.";
+    } else {
+      result.className = "error";
+      result.textContent =
+        "Failed to save record.";
+    }
+});
+</script>
+
+</body>
+</html>
