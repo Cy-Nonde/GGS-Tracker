@@ -24,6 +24,33 @@ export async function login(username, password) {
   return data;
 }
 
+//SaveDrugUse
+export async function saveDrugUse(drugName, status, notes = "") {
+  try {
+    const res = await fetch("/api/druguse", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${window.API_TOKEN || ""}`
+      },
+      body: JSON.stringify({
+        drugName,   // e.g. "Paracetamol", "Alcohol"
+        status,     // "used" or "not_used"
+        notes       // optional text
+      })
+    });
+
+    return await res.json();
+  } catch (err) {
+    console.error("Drug use save error:", err);
+    return {
+      success: false,
+      message: "Failed to save drug-use record."
+    };
+  }
+}
+
+
 // ✅ Chat
 export async function sendMessage(message, context = [], mode = "default", username = "guest") {
   try {
