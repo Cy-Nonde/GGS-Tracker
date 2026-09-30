@@ -22,9 +22,13 @@ document.getElementById("druguse-btn").addEventListener("click", () => {
 });
 
 //DrugUse Records
-document
-  .getElementById("historyreview-btn").addEventListener("click", () => {
+document.getElementById("historyreview-btn").addEventListener("click", () => {
     window.location.href = "/HistoryReview.html";
+  });
+
+//Monthly self check
+document.getElementById("checklist-btn").addEventListener("click", () => {
+    window.location.href = "/CheckList.html";
   });
 
 
