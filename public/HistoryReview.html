@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>History Review</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+.record {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+h1 {
+    text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Drug Use History</h1>
+
+<div id="history-container">
+    Loading records...
+</div>
+
+<script>
+
+async function loadDrugHistory() {
+
+    try {
+
+        const response =
+          await fetch("/api/druguse");
+
+        const records =
+          await response.json();
+
+        const container =
+          document.getElementById(
+            "history-container"
+          );
+
+        container.innerHTML = "";
+
+        if (records.length === 0) {
+            container.innerHTML =
+              "<p>No records found.</p>";
+            return;
+        }
+
+        records.forEach(record => {
+
+            container.innerHTML += `
+                <div class="record">
+                    <h3>${record.drug_name}</h3>
+
+                    <p>
+                      <strong>Status:</strong>
+                      ${record.status}
+                    </p>
+
+                    <p>
+                      <strong>Notes:</strong>
+                      ${record.notes || "None"}
+                    </p>
+
+                    <p>
+                      <strong>Date:</strong>
+                      ${record.created_at}
+                    </p>
+                </div>
+            `;
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        document.getElementById(
+          "history-container"
+        ).innerHTML =
+          "<p>Failed to load records.</p>";
+    }
+}
+
+loadDrugHistory();
+
+</script>
+
+</body>
+</html>
