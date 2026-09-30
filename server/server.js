@@ -32,6 +32,28 @@ app.use("/api/comments", commentRoutes);
 app.use('/', historyRoutes);
 app.use('/', recordRoutes);
 
+const sqlite3 = require("sqlite3").verbose();
+
+const db = new sqlite3.Database("./database.sqlite", (err) => {
+  if (err) {
+    console.error(err.message);
+  } else {
+    console.log("Connected to SQLite database.");
+  }
+});
+
+// Create table on server startup
+db.run(`
+CREATE TABLE IF NOT EXISTS drug_use (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    drug_name TEXT NOT NULL,
+    status TEXT NOT NULL,
+    notes TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+)
+`);
+
+
 // AIChatbot + Auth integrations
 app.use("/api/chat", chatRoutes);   // uses chatController + aiService
 app.use("/api/auth", authRoutes);   // uses authController + userModel
