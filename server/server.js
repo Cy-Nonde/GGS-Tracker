@@ -12,6 +12,7 @@ const collaboratorRoutes = require("./routes/collaborators");
 const commentRoutes = require("./routes/comments");
 const historyRoutes = require('./routes/history');
 const recordRoutes = require('./routes/records');
+const drugRoutes = require("./routes/drugRoutes");
 
 // AI chatbot + auth routes 
 const chatRoutes = require("./routes/chatRoutes");
@@ -31,6 +32,7 @@ app.use("/api/collaborators", collaboratorRoutes);
 app.use("/api/comments", commentRoutes);
 app.use('/', historyRoutes);
 app.use('/', recordRoutes);
+app.use("/api", drugRoutes);
 
 const sqlite3 = require("sqlite3").verbose();
 
