@@ -4,15 +4,9 @@
   <meta charset="UTF-8">
   <title>DrugUse</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/styles.css">
 
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 700px;
-      margin: auto;
-      padding: 20px;
-    }
-
     form {
       display: flex;
       flex-direction: column;
@@ -71,9 +65,7 @@
 <p id="result"></p>
 
 <script>
-document
-  .getElementById("druguse-form")
-  .addEventListener("submit", async (e) => {
+document.getElementById("druguse-form").addEventListener("submit", async (e) => {
 
     e.preventDefault();
 
