@@ -59,12 +59,12 @@ router.get("/checklist", (req, res) => {
       if (err) {
         return res.status(500).json(err);
       }
-      
+
       if (!result.first_record) {
         return res.json({
-         eligible: false,
-         daysRemaining: 30,
-         message: "No drug-use records found."
+          eligible: false,
+          daysRemaining: 30,
+          message: "No drug-use records found."
         });
       }
 
@@ -78,33 +78,51 @@ router.get("/checklist", (req, res) => {
         (now - firstRecord) /
         (1000 * 60 * 60 * 24);
 
+      const currentMonth =
+        Math.floor(daysPassed / 30) + 1;
+
       if (daysPassed < 30) {
 
         return res.json({
           eligible: false,
+          currentMonth: 1,
           daysRemaining:
             Math.ceil(30 - daysPassed)
         });
 
       }
 
+      const startDay =
+        (currentMonth - 1) * 30;
+
+      const endDay =
+        currentMonth * 30;
+
       db.all(
         `
         SELECT *
         FROM drug_use
+        WHERE julianday(created_at) -
+              julianday(?) >= ?
+        AND julianday(created_at) -
+            julianday(?) < ?
         ORDER BY created_at DESC
         `,
-        [],
+        [
+          result.first_record,
+          startDay,
+          result.first_record,
+          endDay
+        ],
         (err, rows) => {
 
           if (err) {
-            return res
-              .status(500)
-              .json(err);
+            return res.status(500).json(err);
           }
 
           res.json({
             eligible: true,
+            currentMonth,
             records: rows
           });
 
