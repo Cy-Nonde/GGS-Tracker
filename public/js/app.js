@@ -21,6 +21,12 @@ document.getElementById("druguse-btn").addEventListener("click", () => {
   window.location.href = "/DrugUse.html";
 });
 
+//DrugUse Records
+document
+  .getElementById("historyreview-btn").addEventListener("click", () => {
+    window.location.href = "/HistoryReview.html";
+  });
+
 
 // Existing DOM refs...
 const chatForm = document.getElementById("chat-form");
