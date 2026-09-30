@@ -29,3 +29,20 @@ router.post("/druguse", (req, res) => {
     }
   );
 });
+
+router.get("/druguse", (req, res) => {
+
+  db.all(
+    "SELECT * FROM drug_use ORDER BY created_at DESC",
+    [],
+    (err, rows) => {
+
+      if (err) {
+        return res.status(500).json(err);
+      }
+
+      res.json(rows);
+    }
+  );
+});
+
