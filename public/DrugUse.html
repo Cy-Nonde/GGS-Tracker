@@ -64,7 +64,7 @@
 
 <p id="result"></p>
 
-<script>
+<!-- <script>
 document.getElementById("druguse-form").addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -103,6 +103,46 @@ document.getElementById("druguse-form").addEventListener("submit", (e) => {
         result.className = "error";
         result.textContent = "Failed to save record to local storage.";
         console.error(error);
+    }
+});
+</script> -->
+
+<script>
+document.getElementById("druguse-form").addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    const drugName = document.getElementById("drug-name").value;
+
+    const status = document.getElementById("drug-status").value;
+
+    const notes = document.getElementById("drug-notes").value;
+
+    const response = await fetch("/api/druguse", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        drugName,
+        status,
+        notes
+      })
+    });
+
+    const data = await response.json();
+
+    const result =
+      document.getElementById("result");
+
+    if (data.success) {
+      result.className = "success";
+      result.textContent =
+        "Drug use record saved successfully.";
+    } else {
+      result.className = "error";
+      result.textContent =
+        "Failed to save record.";
     }
 });
 </script>
