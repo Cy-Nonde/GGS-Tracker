@@ -1,4 +1,4 @@
-// GGSHome.js
+// GGSHome.js //Effete
 import React, { useState } from 'react';
 import {
   View,
