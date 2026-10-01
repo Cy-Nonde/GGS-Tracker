@@ -9,7 +9,6 @@ import {
   Switch,
   TouchableOpacity,
 } from 'react-native';
-import socket from '../socket'; // shared socket instance
 
 export default function HistoryScreen({ route }) {
   const { projectId } = route.params;
@@ -33,50 +32,34 @@ export default function HistoryScreen({ route }) {
     fetchHistory();
   }, [projectId]);
 
-  // 🔔 Realtime socket events (update state only, toasts handled globally in App.js)
   useEffect(() => {
-    socket.on('recordCreated', (record) => {
       setHistory((prev) => [...prev, {
         id: `rec-${record.id}-created`,
         type: 'record',
         date: record.createdAt,
         message: `Record created: ${record.data}`,
       }]);
-    });
 
-    socket.on('recordUpdated', (record) => {
       setHistory((prev) => [...prev, {
         id: `rec-${record.id}-updated`,
         type: 'record-update',
         date: record.updatedAt,
         message: `Record updated: ${record.data}`,
       }]);
-    });
 
-    socket.on('recordDeleted', (record) => {
       setHistory((prev) => [...prev, {
         id: `rec-${record.id}-deleted`,
         type: 'record-delete',
         date: record.deletedAt,
         message: `Record deleted`,
       }]);
-    });
 
-    socket.on('notificationSent', (note) => {
       setHistory((prev) => [...prev, {
         id: `note-${note.id}`,
         type: 'notification',
         date: note.deliveredAt,
         message: `${note.message} [${note.status}]`,
       }]);
-    });
-
-    return () => {
-      socket.off('recordCreated');
-      socket.off('recordUpdated');
-      socket.off('recordDeleted');
-      socket.off('notificationSent');
-    };
   }, []);
 
   const filteredHistory = showDeleted
@@ -111,7 +94,6 @@ export default function HistoryScreen({ route }) {
       case 'record': return '✅';
       case 'record-update': return '✏️';
       case 'record-delete': return '❌';
-      case 'notification': return '🔔';
       default: return '📄';
     }
   };
@@ -188,7 +170,6 @@ export default function HistoryScreen({ route }) {
                         ? 'Record Deleted'
                         : event.type === 'record'
                         ? 'Record Created'
-                        : 'Notification'}
                     </Text>
                   </View>
                 </View>
