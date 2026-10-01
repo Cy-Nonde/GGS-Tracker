@@ -10,7 +10,7 @@ export default function TimelineScreen({ route }) {
   const navigation = useNavigation();
 
   useEffect(() => {
-    getTimeline(projectId).then(setEvents);
+    getTimeline(username = "guest").then(setEvents);
   }, [projectId]);
 
   return (
@@ -24,10 +24,7 @@ export default function TimelineScreen({ route }) {
         )}
       />
       {/* Navigation buttons */}
-      <Button title="View Tasks" onPress={() => navigation.navigate('Tasks', { projectId })} />
-      <Button title="View Collaborators" onPress={() => navigation.navigate('Collaborators', { projectId })} />
-      <Button title="View Comments" onPress={() => navigation.navigate('Comments', { projectId })} />
-      <Button title="View History" onPress={() => navigation.navigate('History', { projectId })} />
+      <Button title="View History" onPress={() => navigation.navigate('History', { username })} />
     </View>
   );
 }
