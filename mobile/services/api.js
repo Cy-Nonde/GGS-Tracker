@@ -25,25 +25,25 @@ export async function login(username, password) {
 }
 
 // Chat
-export async function sendMessage(message, context = [], mode = "default", username = "guest") {
-  try {
-    const response = await fetch("http://localhost:8080/api/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${global.API_TOKEN || ""}`
-      },
-      body: JSON.stringify({ message, context, mode, username })
-    });
+//export async function sendMessage(message, context = [], mode = "default", username = "guest") {
+  //try {
+    //const response = await fetch("http://localhost:8080/api/chat", {
+      //method: "POST",
+      //headers: {
+        //"Content-Type": "application/json",
+        //"Authorization": `Bearer ${global.API_TOKEN || ""}`
+      //},
+      //body: JSON.stringify({ message, context, mode, username })
+    //});
 
-    const data = await response.json();
-    if (data.error) throw new Error(data.error);
-    return data;
-  } catch (err) {
-    console.error("Mobile API error:", err);
-    return { reply: "⚠️ Error: Unable to reach AI service.", mode };
-  }
-}
+    //const data = await response.json();
+    //if (data.error) throw new Error(data.error);
+    //return data;
+  //} catch (err) {
+    //console.error("Mobile API error:", err);
+    //return { reply: "⚠️ Error: Unable to reach AI service.", mode };
+  //}
+//}
 
 // History
 export async function loadHistory(username = "guest") {
@@ -74,17 +74,17 @@ export async function clearHistory(username = "guest") {
 }
 
 // Profile
-export async function updateMode(mode) {
-  const res = await fetch("http://localhost:8080/api/profile/mode", {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": global.API_TOKEN
-    },
-    body: JSON.stringify({ mode })
-  });
-  return res.json();
-}
+//export async function updateMode(mode) {
+  //const res = await fetch("http://localhost:8080/api/profile/mode", {
+    //method: "PUT",
+    //headers: {
+      //"Content-Type": "application/json",
+      //"Authorization": global.API_TOKEN
+    //},
+    //body: JSON.stringify({ mode })
+  //});
+  //return res.json();
+//}
 
 export async function changePassword(oldPassword, newPassword) {
   const res = await fetch("http://localhost:8080/api/profile/password", {
@@ -98,25 +98,24 @@ export async function changePassword(oldPassword, newPassword) {
   return res.json();
 }
 
-// Extras (optional parity with web features)
 
 // Notifications
-export async function fetchNotifications(projectId) {
-  try {
-    const res = await fetch(`http://localhost:8080/api/projects/${projectId}/history/notifications`, {
-      headers: { "Authorization": `Bearer ${global.API_TOKEN || ""}` }
-    });
-    return await res.json();
-  } catch (err) {
-    console.error("Notifications fetch error:", err);
-    return [];
-  }
+//export async function fetchNotifications(projectId) {
+  //try {
+    //const res = await fetch(`http://localhost:8080/api/projects/${projectId}/history/notifications`, {
+      //headers: { "Authorization": `Bearer ${global.API_TOKEN || ""}` }
+    //});
+    //return await res.json();
+  //} catch (err) {
+    //console.error("Notifications fetch error:", err);
+    //return [];
+  //}
 }
 
 // Records
-export async function fetchRecords(projectId) {
+export async function fetchRecords(username = "guest") {
   try {
-    const res = await fetch(`http://localhost:8080/api/projects/${projectId}/records`, {
+    const res = await fetch(`http://localhost:8080/api/records/${username}`, {
       headers: { "Authorization": `Bearer ${global.API_TOKEN || ""}` }
     });
     return await res.json();
@@ -126,15 +125,15 @@ export async function fetchRecords(projectId) {
   }
 }
 
-// Project History
-export async function fetchProjectHistory(projectId) {
+// History
+export async function fetchHistory(username = "guest") {
   try {
-    const res = await fetch(`http://localhost:8080/api/projects/${projectId}/history`, {
+    const res = await fetch(`http://localhost:8080/api/history/${username}`, {
       headers: { "Authorization": `Bearer ${global.API_TOKEN || ""}` }
     });
     return await res.json();
   } catch (err) {
-    console.error("Project history fetch error:", err);
+    console.error("History fetch error:", err);
     return [];
   }
 }
