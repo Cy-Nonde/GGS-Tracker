@@ -1,7 +1,7 @@
 // recordController.js
-const NotificationService = require('./notificationService');
-const Record = require('./record');
-const milestones = [5, 10, 20]; // Example thresholds
+//const NotificationService = require('./notificationService');
+//const Record = require('./record');
+//const milestones = [5, 10, 20]; // Example thresholds
 
 exports.addRecord = async (req, res) => {
   try {
