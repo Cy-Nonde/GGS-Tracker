@@ -49,9 +49,9 @@
     <option value="not_used">Not Used</option>
   </select>
 
-  <label>Notes</label>
+  <label>Comments</label>
   <textarea
-    id="drug-notes"
+    id="drug-comments"
     rows="4"
     placeholder="Optional notes"
   ></textarea>
@@ -71,13 +71,13 @@ document.getElementById("druguse-form").addEventListener("submit", (e) => {
     
     const drugName = document.getElementById("drug-name").value;
     const status = document.getElementById("drug-status").value;
-    const notes = document.getElementById("drug-notes").value;
+    const comments = document.getElementById("drug-comments").value;
 
     const newRecord = {
         id: Date.now(), // Unique ID based on current timestamp
         drugName,
         status,
-        notes,
+        comments,
         timestamp: new Date().toISOString()
     };
 
@@ -116,7 +116,7 @@ document.getElementById("druguse-form").addEventListener("submit", async (e) => 
 
     const status = document.getElementById("drug-status").value;
 
-    const notes = document.getElementById("drug-notes").value;
+    const comments = document.getElementById("drug-comments").value;
 
     const response = await fetch("/api/druguse", {
       method: "POST",
@@ -126,7 +126,7 @@ document.getElementById("druguse-form").addEventListener("submit", async (e) => 
       body: JSON.stringify({
         drugName,
         status,
-        notes
+        comments
       })
     });
 
