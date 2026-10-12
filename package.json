@@ -23,6 +23,7 @@
     "jsonwebtoken": "^9.0.2",
     "qs": "^6.15.3",
     "sqlite3": "^5.1.7",
+    "depd": "^2.0.0",
     "uuid": "^14.0.0"
   },
   "directories": {
