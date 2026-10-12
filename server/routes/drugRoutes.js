@@ -1,6 +1,34 @@
-router.post("/druguse", (req, res) => {
+const express = require("express");
+const sqlite3 = require("sqlite3").verbose();
 
-  const { drugName, status, notes } = req.body;
+const router = express.Router();
+
+const db = new sqlite3.Database("./drug_use.db", (err) => {
+  if (err) {
+    console.error("Database connection failed:", err.message);
+  } else {
+    console.log("Connected to SQLite database.");
+
+    db.run(`
+      CREATE TABLE IF NOT EXISTS drug_use (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        drug_name TEXT NOT NULL,
+        status TEXT NOT NULL,
+        comments TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `, (err) => {
+      if (err) {
+        console.error("Error creating table:", err.message);
+      } else {
+        console.log("drug_use table ready.");
+      }
+    }); //closes db.run
+  } //closes first else
+}); //closes database connector
+
+router.post("/druguse", (req, res) => {
+  const { drugName, status, comments } = req.body;
 
   db.run(
     `
@@ -8,35 +36,32 @@ router.post("/druguse", (req, res) => {
     (
       drug_name,
       status,
-      notes
+      comments
     )
     VALUES (?, ?, ?)
     `,
-    [drugName, status, notes],
+    [drugName, status, comments],
     function (err) {
-
       if (err) {
         return res.status(500).json({
           success: false,
-          error: err.message
+          error: err.message,
         });
       }
 
       res.json({
         success: true,
-        id: this.lastID
+        id: this.lastID,
       });
     }
   );
 });
 
 router.get("/druguse", (req, res) => {
-
   db.all(
     "SELECT * FROM drug_use ORDER BY created_at DESC",
     [],
     (err, rows) => {
-
       if (err) {
         return res.status(500).json(err);
       }
@@ -47,7 +72,6 @@ router.get("/druguse", (req, res) => {
 });
 
 router.get("/checklist", (req, res) => {
-
   db.get(
     `
     SELECT MIN(created_at) AS first_record
@@ -55,7 +79,6 @@ router.get("/checklist", (req, res) => {
     `,
     [],
     (err, result) => {
-
       if (err) {
         return res.status(500).json(err);
       }
@@ -64,39 +87,29 @@ router.get("/checklist", (req, res) => {
         return res.json({
           eligible: false,
           daysRemaining: 30,
-          message: "No drug-use records found."
+          message: "No drug-use records found.",
         });
       }
 
-      const firstRecord =
-        new Date(result.first_record);
-
-      const now =
-        new Date();
+      const firstRecord = new Date(result.first_record);
+      const now = new Date();
 
       const daysPassed =
-        (now - firstRecord) /
-        (1000 * 60 * 60 * 24);
+        (now - firstRecord) / (1000 * 60 * 60 * 24);
 
       const currentMonth =
         Math.floor(daysPassed / 30) + 1;
 
       if (daysPassed < 30) {
-
         return res.json({
           eligible: false,
           currentMonth: 1,
-          daysRemaining:
-            Math.ceil(30 - daysPassed)
+          daysRemaining: Math.ceil(30 - daysPassed),
         });
-
       }
 
-      const startDay =
-        (currentMonth - 1) * 30;
-
-      const endDay =
-        currentMonth * 30;
+      const startDay = (currentMonth - 1) * 30;
+      const endDay = currentMonth * 30;
 
       db.all(
         `
@@ -112,10 +125,9 @@ router.get("/checklist", (req, res) => {
           result.first_record,
           startDay,
           result.first_record,
-          endDay
+          endDay,
         ],
         (err, rows) => {
-
           if (err) {
             return res.status(500).json(err);
           }
@@ -123,12 +135,15 @@ router.get("/checklist", (req, res) => {
           res.json({
             eligible: true,
             currentMonth,
-            records: rows
+            records: rows,
           });
-
         }
       );
-
     }
   );
 });
+
+module.exports = {
+  router,
+  db,
+};
