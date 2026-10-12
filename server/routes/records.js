@@ -1,4 +1,5 @@
 // routes/records.js
+//not called. handled by drugRoutes.js
 module.exports = (io) => {
   const router = require('express').Router();
   const sqlite3 = require('sqlite3').verbose();
