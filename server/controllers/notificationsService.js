@@ -1,6 +1,6 @@
 // notificationService.js
-const apn = require('apn'); // For iOS
-const admin = require('firebase-admin'); // For Android
+//const apn = require('apn'); // For iOS
+//const admin = require('firebase-admin'); // For Android
 
 // Initialize Firebase Admin SDK separately with service account
 // Initialize APN provider with your key/cert
