@@ -7,19 +7,19 @@ const cors = require("cors");
 const errorHandler = require("./middleware/errorHandler");
 
 // Core project routes
-const projectRoutes = require("./routes/projects");
-const taskRoutes = require("./routes/tasks");
-const collaboratorRoutes = require("./routes/collaborators");
-const commentRoutes = require("./routes/comments");
-const historyRoutes = require("./routes/history");
-const recordRoutes = require("./routes/records");
+//const projectRoutes = require("./routes/projects");
+//const taskRoutes = require("./routes/tasks");
+//const collaboratorRoutes = require("./routes/collaborators");
+//const commentRoutes = require("./routes/comments");
+//const historyRoutes = require("./routes/history");
+//const recordRoutes = require("./routes/records");
 
 // Drug routes
 const { router: drugRoutes } = require("./routes/drugRoutes");
 
 // AI chatbot + auth routes
-const chatRoutes = require("./routes/chatRoutes");
-const authRoutes = require("./routes/authRoutes");
+//const chatRoutes = require("./routes/chatRoutes");
+//const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
@@ -30,19 +30,19 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, "../public")));
 
 // Routes
-app.use("/api/projects", projectRoutes);
-app.use("/api/tasks", taskRoutes);
-app.use("/api/collaborators", collaboratorRoutes);
-app.use("/api/comments", commentRoutes);
-app.use("/", historyRoutes);
-app.use("/", recordRoutes);
+//app.use("/api/projects", projectRoutes);
+//app.use("/api/tasks", taskRoutes);
+//app.use("/api/collaborators", collaboratorRoutes);
+//app.use("/api/comments", commentRoutes);
+//app.use("/", historyRoutes);
+//app.use("/", recordRoutes);
 
 // Drug routes
 app.use("/api", drugRoutes);
 
 // AI Chatbot + Auth integrations
-app.use("/api/chat", chatRoutes);
-app.use("/api/auth", authRoutes);
+//app.use("/api/chat", chatRoutes);
+//app.use("/api/auth", authRoutes);
 
 // Health Check Endpoint
 app.get("/api/health", async (req, res, next) => {
