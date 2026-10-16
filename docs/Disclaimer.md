@@ -1,1 +1,0 @@
-Project contains obsolete js functions. JS declarations have been reduced to scope. Management is done by server, routes, html, and css.

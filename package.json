@@ -5,8 +5,7 @@
   "main": "server/server.js",
   "scripts": {
     "start": "node server/server.js",
-    "dev": "node --watch server/server.js",
-    "test": "node tests/visible/tests.js"
+    "dev": "node --watch server/server.js"
   },
   "keywords": [
     "csc4004",
@@ -14,29 +13,21 @@
     "express",
     "tracker"
   ],
-  "author": "",
+  "author": "2020893536",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.6",
     "express": "^4.22.2",
     "helmet": "^7.2.0",
-    "jsonwebtoken": "^9.0.2",
-    "qs": "^6.15.3",
-    "sqlite3": "^5.1.7",
-    "depd": "^2.0.0",
-    "express": "^4.21.0",
-    "uuid": "^14.0.0"
-  },
-  "directories": {
-    "doc": "docs",
-    "test": "tests"
+    "sqlite3": "^6.0.1",
+    "sqlite": "^5.1.1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/unza-cs-courses/final-project-Cy-Nonde.git"
+    "url": "git+https://github.com/Cy-Nonde/GGS-Tracker.git"
   },
   "bugs": {
-    "url": "https://github.com/unza-cs-courses/final-project-Cy-Nonde/issues"
+    "url": "https://github.com/Cy-Nonde/GGS-Tracker/issues"
   },
-  "homepage": "https://github.com/unza-cs-courses/final-project-Cy-Nonde#readme"
+  "homepage": "https://github.com/Cy-Nonde/GGS-Tracker#readme"
 }

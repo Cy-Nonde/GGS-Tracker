@@ -12,7 +12,8 @@ const db = new sqlite3.Database("./drug_use.db", (err) => {
     db.run(`
       CREATE TABLE IF NOT EXISTS drug_use (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        drug_name TEXT NOT NULL,
+        drug_name TEXT NOT NULL
+	CHECK(TRIM(drug_name) <> ''),
         status TEXT NOT NULL,
         comments TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -59,7 +60,7 @@ router.post("/druguse", (req, res) => {
 
 router.get("/druguse", (req, res) => {
   db.all(
-    "SELECT * FROM drug_use ORDER BY created_at DESC",
+    "SELECT * FROM drug_use ORDER BY created_at DESC, id DESC",
     [],
     (err, rows) => {
       if (err) {
@@ -119,7 +120,7 @@ router.get("/checklist", (req, res) => {
               julianday(?) >= ?
         AND julianday(created_at) -
             julianday(?) < ?
-        ORDER BY created_at DESC
+        ORDER BY created_at DESC, id DESC
         `,
         [
           result.first_record,
