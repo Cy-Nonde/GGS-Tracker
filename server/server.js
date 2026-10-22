@@ -45,7 +45,7 @@ app.listen(PORT, async () => {
   await Promise.resolve().then(() => {
     console.log(`
 ======================================================
-    GGS TRACKER + AIChat + Auth
+    GGS TRACKER
     Server Running at http://localhost:${PORT}
 ======================================================
     `);

@@ -19,8 +19,7 @@
     "cors": "^2.8.6",
     "express": "^4.22.2",
     "helmet": "^7.2.0",
-    "sqlite3": "^6.0.1",
-    "sqlite": "^5.1.1"
+    "sqlite3": "^6.0.1"
   },
   "repository": {
     "type": "git",
