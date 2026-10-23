@@ -45,7 +45,8 @@ API Endpoints:
 	GET `/api/druguse`
 
 		id:
-		drugName:
+		drug_name:
+        status:
 		comments:
 		created_at:
 
