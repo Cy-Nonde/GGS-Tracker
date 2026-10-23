@@ -1,3 +1,7 @@
+document.getElementById('back-button').addEventListener('click', () => {
+    window.location.href = '/';
+});
+
 async function loadChecklist() {
 
     const content =
