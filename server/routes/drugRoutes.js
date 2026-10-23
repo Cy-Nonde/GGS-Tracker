@@ -30,18 +30,28 @@ const db = new sqlite3.Database("./drug_use.db", (err) => {
 
 router.post("/druguse", (req, res) => {
   const { drugName, status, comments } = req.body;
+  if (
+    !drugName ||
+    !status ||
+    drugName.trim() === "" ||
+    status.trim() === ""
+  ) {
+    return res.status(400).json({
+      success: false,
+      message: "drugName and status are required",
+    });
+  }
 
   db.run(
     `
-    INSERT INTO drug_use
-    (
+    INSERT INTO drug_use (
       drug_name,
       status,
       comments
     )
     VALUES (?, ?, ?)
     `,
-    [drugName, status, comments],
+    [drugName.trim(), status.trim(), comments || null],
     function (err) {
       if (err) {
         return res.status(500).json({
@@ -50,7 +60,7 @@ router.post("/druguse", (req, res) => {
         });
       }
 
-      res.json({
+      return res.status(201).json({
         success: true,
         id: this.lastID,
       });
