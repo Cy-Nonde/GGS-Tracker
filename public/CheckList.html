@@ -53,8 +53,8 @@ h1 {
 <body>
 
 <button
-    class="back-btn"
-    onclick="window.location.href='/'">
+    id="back-button"
+    class="back-btn">
     Back Home
 </button>
 
@@ -64,119 +64,7 @@ h1 {
     Loading...
 </div>
 
-<script>
-
-async function loadChecklist() {
-
-    const content =
-        document.getElementById("content");
-
-    try {
-
-        const response =
-            await fetch("/api/checklist");
-
-        const data =
-            await response.json();
-
-        // Checklist locked
-        if (!data.eligible) {
-
-            content.innerHTML = `
-                <div class="locked">
-                    <h2>Checklist Locked</h2>
-
-                    <p>
-                        A full review becomes available
-                        after one month of records.
-                    </p>
-
-                    <p>
-                        Days Remaining:
-                        <strong>${data.daysRemaining}</strong>
-                    </p>
-                </div>
-            `;
-
-            return;
-        }
-
-        let html = `
-            <div class="success">
-                <h2>
-                    Review Available
-                </h2>
-
-                <p>
-                    Current Review Month:
-                    <strong>
-                        ${data.currentMonth}
-                    </strong>
-                </p>
-            </div>
-            <br>
-        `;
-
-        if (!data.records ||
-            data.records.length === 0) {
-
-            html += `
-                <p class="empty">
-                    No records exist for Month
-                    ${data.currentMonth}.
-                </p>
-            `;
-
-            content.innerHTML = html;
-            return;
-        }
-
-        data.records.forEach(record => {
-
-            html += `
-                <div class="card">
-
-                    <div class="record-title">
-                        ${record.drug_name}
-                    </div>
-
-                    <p>
-                        <strong>Status:</strong>
-                        ${record.status}
-                    </p>
-
-                    <p>
-                        <strong>Notes:</strong>
-                        ${record.notes || "None"}
-                    </p>
-
-                    <p>
-                        <strong>Recorded:</strong>
-                        ${record.created_at}
-                    </p>
-
-                </div>
-            `;
-        });
-
-        content.innerHTML = html;
-
-    }
-    catch(error) {
-
-        console.error(error);
-
-        content.innerHTML = `
-            <div class="locked">
-                Failed to load checklist.
-            </div>
-        `;
-    }
-}
-
-loadChecklist();
-
-</script>
+<script type="module" src="js/CheckList.js"></script>
 
 </body>
 </html>
