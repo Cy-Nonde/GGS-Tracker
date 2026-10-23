@@ -7,7 +7,7 @@
 //open a terminal or command line
 //install node {Linux: `apt install nodejs npm` || `apk add nodejs npm`}
 //run the command below
-npm install
+npm ci
 
 # Start the server
 //within the same terminal/command line, run the command below
@@ -32,7 +32,7 @@ Open the homepage:
 
 API Endpoints:
 
-	POST `/druguse`
+	POST `/api/druguse`
 
 		success: true
 		id: this.lastId
@@ -42,14 +42,14 @@ API Endpoints:
 		success: false
 		error: err.message
 
-	GET `/druguse`
+	GET `/api/druguse`
 
 		id:
 		drugName:
 		comments:
 		created_at:
 
-	GET `/checklist`
+	GET `/api/checklist`
 
 		eligible: false
 		daysRemaining: 30
