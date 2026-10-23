@@ -63,3 +63,6 @@ API Endpoints:
 		records: rows
 
 ---
+
+Tag link: https://github.com/Cy-Nonde/GGS-Tracker/releases/tag/v1.0.2
+Commit SHA: cd5ec9c4f391812658a8d4bf882d95c72a491991
